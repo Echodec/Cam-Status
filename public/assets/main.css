@@ -1,0 +1,206 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Header styles */
+header {
+    padding: 15px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    z-index: 1; /* Asegura que el header esté por encima del menú */
+}
+
+/* Form container */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+form {
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+#result {
+    margin-left: 60px;
+    font-weight: bold;
+}
+
+#ping-status {
+    margin-top: 20px;
+    font-size: 1.2em;
+    color: #333;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Layout for main content and menu */
+.main-content {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    margin-top: 15px; /* Ajuste para evitar el solapamiento con el encabezado */
+}
+
+.deviceslist{
+    display: flex;
+    flex: 1; /* Permitir que este div ocupe el espacio restante */
+    margin-left: 260px; /* Espacio para el menú y un margen adicional */
+    padding: 15px; /* Espaciado interno para mejorar la separación */
+    overflow-x: auto; /* Permitir desplazamiento horizontal si es necesario */
+}
+
+/* Ajustar la altura del menú */
+#menu {
+    width: 240px;
+    background-color: #f4f4f4;
+    padding: 15px;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    height: calc(120vh - 80px); /* Ajustar la altura total menos un margen adicional */
+    box-sizing: border-box;
+    position: fixed; /* Fijo en el lado izquierdo */
+    top: 75px; /* Ajustar según la altura del header */
+    left: 0;
+}
+
+/* Estilos para los enlaces del menú */
+#menu a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+#menu a.active {
+    background-color: #ddd;
+}
+
+#menu a:hover {
+    background-color: #333;
+    color: #ddd;}
+
+/* Dashboard styles */
+#dashboard {
+    margin-left: 250px; /* Espacio para el menú */
+    padding: 15px;
+    width: calc(100% - 250px); /* Ajusta el ancho para no solaparse con el menú */
+    box-sizing: border-box;
+    overflow-y: auto; /* Asegura que el contenido sea desplazable si excede el tamaño */
+}
+
+#dashboard h2 {
+    margin-top: 0;
+}
+
+#dashboard-content {
+    font-size: 1.1em;
+}
+
+/* Hacer que la tabla sea responsive */
+.table-responsive {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 45px;
+    border-radius: 8px;
+}
+
+/* Ajustar margen de .deviceslist para pantallas pequeñas */
+.deviceslist {
+    display: flex;
+    flex-direction: column;
+    flex: 1; 
+    margin-left: 300px; 
+    padding: 10px; 
+    overflow-x: auto; 
+    justify-content: center; /* Centra horizontalmente el contenido */
+}
+
+/* Estilos de la tabla */
+.table {
+    width: 100%; /* Asegurarse de que la tabla ocupe todo el espacio */
+    border-collapse: collapse; /* Quitar espacios entre celdas */
+    table-layout: auto; /* Cambia a auto para permitir que el ancho se ajuste dinámicamente */
+}
+
+.table th, .table td {
+    padding: 10px; /* Espaciado interno */
+    border: 1px solid #ddd; /* Bordes de la tabla */
+    text-align: left; /* Alinear el texto a la izquierda */
+}
+
+.tablehead {
+    background-color: #333;
+    color: #ddd;
+}
+
+.table th:nth-child(1),
+.table td:nth-child(1) { /* Nomenclatura */
+    min-width: 200px; /* Ajusta según sea necesario */
+}
+
+.table th:nth-child(3),
+.table td:nth-child(3) { /* Localización */
+    min-width: 200px; /* Ajusta según sea necesario */
+}
+
+
+/* Ajuste del tamaño de las flechas SVG en la paginación */
+.pagination .page-item .page-link svg {
+    width: 16px; /* Ajusta el tamaño deseado */
+    height: 16px;
+}
+
+/* Alternativa: Sobrescribir específicamente clases w-5 y h-5 */
+.w-5, .h-5 {
+    width: 14px !important; /* Reducir ancho de flechas */
+    height: 14px !important; /* Reducir alto de flechas */
+}
+
+/* Espaciado entre los botones "Previous" y "Next" */
+.flex.justify-between.flex-1.sm\:hidden {
+    gap: 10px !important; /* Espacio entre los botones "Previous" y "Next" */
+}
+
+.flex.justify-between.flex-1.sm\:hidden .relative.inline-flex.items-center {
+    border-radius: 8px !important; /* Ajusta el valor según el redondeo deseado */
+}
+
+/* Espaciado para el mensaje de resultados */
+.text-sm.text-gray-700.leading-5.dark\:text-gray-400 {
+    margin-top: 15px !important; /* Espacio a la derecha del mensaje "Showing 1 to 10 of 12 results" */
+}
+
+/* Espaciado entre los números de página y las flechas */
+.relative.z-0.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
+    gap: 5px !important; /* Espacio entre los números de página y las flechas */
+}
+
+.relative.z-0.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md .relative.inline-flex.items-center {
+    border-radius: 8px !important; /* Aplica el mismo valor o ajusta según el diseño deseado */
+}
+
+
