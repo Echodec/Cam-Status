@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Models\Dispositivo;
+use Illuminate\Support\Facades\Log;
 
 class PingController extends Controller
 {
@@ -15,11 +16,7 @@ class PingController extends Controller
 
     public function pingc(Request $request)
     {
-        \Log::info('PingController -> pingc ejecutado.');
-        return response()->json(['message' => 'Controlador ejecutado correctamente.']);
-    
-
-        $dispositivos = Dispositivo::all(); // O personaliza la consulta si es necesario
+        $dispositivos = Dispositivo::where('estado', 'Activo')->get(); // O personaliza la consulta si es necesario
 
         $response = [];
 
@@ -30,10 +27,12 @@ class PingController extends Controller
             // Hacer ping a cada dispositivo
             $pingResult = $this->pingIp($ip);
 
+            $estado = $pingResult['message'] === 'success' ? 'En línea' : 'Sin conexión';
+
             // Agregar el resultado del ping junto con la IP
             $response[] = [
                 'ip' => $ip,
-                'message' => $pingResult
+                'message' => $estado, // En línea o Sin conexión
             ];
         }
 
@@ -44,13 +43,11 @@ class PingController extends Controller
     // Método para hacer ping a una IP
     private function pingIp($ip)
     {
-        \Log::info("Intentando hacer ping a {$ip}");
-
         $response = ['message' => ''];
 
         // Validar si la IP es válida
         if (!filter_var($ip, FILTER_VALIDATE_IP)) {
-            return 'Dirección IP no válida';
+            return ['message' => 'Sin conexión'];
         }
 
         try {
@@ -59,16 +56,16 @@ class PingController extends Controller
 
             // Realizar la solicitud POST al servidor Node.js
             $nodeResponse = Http::post($nodeUrl, ['ip' => $ip]);
+            Log::info('Node.js Response:', $nodeResponse->json());
 
-            if ($nodeResponse->ok()) {
-                $response['message'] = $nodeResponse->json()['message'];
-            } else {
-                $response['message'] = 'Error en la solicitud al servidor Node.js.';
-            }
+            if ($nodeResponse->ok() && $nodeResponse->json()['message'] === 'success') {
+                return ['message' => 'En línea'];
+            } 
         } catch (\Exception $e) {
-            $response['message'] = 'Error al intentar conectar con el servidor Node.js: ' . $e->getMessage();
+            Log::error('Error en pingIp:', ['error' => $e->getMessage()]);
+            return ['message' => 'Sin conexión'];
         }
 
-        return response()->json($response);
+        return ['message' => 'Sin conexión'];
     }
 }

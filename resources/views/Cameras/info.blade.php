@@ -24,9 +24,11 @@
 
         <div class="mb-3">
           <label for="" class="form-label">Localización</label>
-          <select class="form-control" name="localizacion" id="localizacion" class="form-control">
+          <select class="form-control" name="idciudad" id="idciudad" class="form-control">
+            <option value="" {{ $Dispositivo->idciudad === null ? 'selected' : '' }}>Sin Cambios</option> 
             @foreach($Localizaciones as $Localizacion)
-              <option value="{{$Localizacion->id}}"> {{$Localizacion->ciudad}} </option>
+              <option value="{{$Localizacion->id}}"> {{$Dispositivo->idciudad == '' }}
+              {{ $Localizacion->ciudad }}</option>
             @endforeach
           </select>
         </div>

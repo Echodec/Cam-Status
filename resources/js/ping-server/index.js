@@ -1,41 +1,29 @@
 const express = require('express');
-const { exec } = require('child_process');
-const dns = require('dns');
-const os = require('os');
+const ping = require('ping');
+const net = require('net');
 const app = express();
 const port = 3000;
 
 app.use(express.json());
 
-// Función para determinar el comando de ping adecuado según el sistema operativo
-const getPingCommand = (ip) => {
-    const platform = os.platform();
-    return platform === 'win32' ? `ping -n 1 ${ip}` : `ping -c 1 ${ip}`;
-};
-
-app.post('/ping', (req, res) => {
+app.post('/ping', async (req, res) => {
     const ip = req.body.ip;
 
-    if (!ip || !/^(\d{1,3}\.){3}\d{1,3}$/.test(ip)) {
-        return res.status(400).json({ message: 'Dirección IP no válida.' });
+    if (!ip || !net.isIP(ip)) {
+        return res.status(400).json({ status: 'error', message: 'Dirección IP no válida.' });
     }
 
-    const pingCommand = getPingCommand(ip);
-
-    exec(pingCommand, (error) => {
-        if (error) {
-            return res.json({ message: `Dispositivo ${ip} fuera de línea.` });
+    try {
+        const result = await ping.promise.probe(ip);
+        if (result.alive) {
+            res.json({ status: 'online', message: `Dispositivo ${ip} está en línea.` });
+        } else {
+            res.json({ status: 'offline', message: `Dispositivo ${ip} fuera de línea.` });
         }
-
-        dns.reverse(ip, (err, hostnames) => {
-            if (err || hostnames.length === 0) {
-                res.json({ message: `Dispositivo ${ip} está en línea.` });
-            } else {
-                const deviceName = hostnames[0];
-                res.json({ message: `Dispositivo "${deviceName}" está en línea.` });
-            }
-        });
-    });
+    } catch (error) {
+        console.error('Error al realizar ping:', error);
+        res.status(500).json({ status: 'error', message: 'Error al realizar ping.' });
+    }
 });
 
 app.listen(port, () => {

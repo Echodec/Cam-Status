@@ -12,9 +12,8 @@ class Dispositivo extends Model
     protected $table = 'dispositivos'; // Nombre de la tabla
 
     // Define los campos que se pueden asignar masivamente
-    protected $primeykey = 'id';
+    protected $primarykey = 'id';
     protected $fillable = ['idciudad','nomenclatura', 'direccion', 'estado'];
-    protected $guarded = [];
     public $timestamps = false;
 
 

@@ -20,6 +20,7 @@ class DispositivoController extends Controller
         $request->validate([
             'nomenclatura' => 'required|string|max:255',
             'direccion' => 'required|ip', // o 'required|string|max:255' si no solo IP
+            'idciudad' => 'nullable|exists:localizacion,id',
             'estado' => 'required|string|max:255',
         ]);
 
@@ -45,8 +46,12 @@ class DispositivoController extends Controller
         $Dispositivos = Dispositivo::find($id);
         $Dispositivos->nomenclatura = $request->input('nomenclatura');
         $Dispositivos->direccion = $request->input('direccion');
-        $Dispositivos->idciudad = $request->input('idciudad');
         $Dispositivos->estado = $request->input('estado');
+
+        if ($request->filled('idciudad')) {
+            $Dispositivos->idciudad = $request->input('idciudad');
+        }
+
         $Dispositivos->update();
 
         return redirect()->back();
